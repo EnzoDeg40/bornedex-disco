@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prise de photo avec prévisualisation</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <h1>Prise de photo avec prévisualisation</h1>
+    
+    <div id="cameraContainer">
+        <video id="camera" autoplay></video>
+        <button id="capture">Prendre une photo</button>
+        <canvas id="snapshot"></canvas>
+        <img id="preview" alt="Prévisualisation de la photo" style="display: none;">
+        <button id="uncapture" style="display: none;">Annuler</button>
+    </div>
+
+    <form id="photoForm">
+        <input type="hidden" name="photo" id="photoData">
+        <button type="submit">Envoyer la photo</button>
+    </form>
+
+    <script>
+        const video = document.getElementById('camera');
+        const canvas = document.getElementById('snapshot');
+        const captureButton = document.getElementById('capture');
+        const previewImage = document.getElementById('preview');
+        const photoForm = document.getElementById('photoForm');
+        const photoDataInput = document.getElementById('photoData');
+        const uncaptureButton = document.getElementById('uncapture');
+
+        // Demander l'accès à la caméra
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then((stream) => {
+                video.srcObject = stream;
+            })
+            .catch((err) => {
+                console.error("Erreur d'accès à la caméra: ", err);
+            });
+
+        // Capturer une photo
+        captureButton.addEventListener('click', () => {
+            const context = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            const dataUrl = canvas.toDataURL('image/png');
+            photoDataInput.value = dataUrl;
+            previewImage.src = dataUrl;
+            previewImage.style.display = 'block';
+            uncaptureButton.style.display = 'block';
+        });
+
+        // Gestion de l'envoi du formulaire
+        photoForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            console.log("Photo envoyée:", photoDataInput.value);
+            // Vous pouvez ajouter ici le code pour envoyer le formulaire à votre serveur
+        });
+    </script>
+</body>
+</html>
