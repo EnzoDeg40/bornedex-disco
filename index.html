@@ -11,10 +11,11 @@
     
     <div id="cameraContainer">
         <video id="camera" autoplay></video>
-        <button id="capture">Prendre une photo</button>
+        <img id="capture" src="take.svg" alt="Prendre une photo">
+        <button id="switchCameraButton">Changer de caméra</button>
         <canvas id="snapshot"></canvas>
         <img id="preview" alt="Prévisualisation de la photo" style="display: none;">
-        <button id="uncapture" style="display: none;">Annuler</button>
+        <img id="uncapture" src="cross.svg" alt="Annuler" style="display: none;">
     </div>
 
     <form id="photoForm">
@@ -31,8 +32,34 @@
         const photoDataInput = document.getElementById('photoData');
         const uncaptureButton = document.getElementById('uncapture');
 
+        let currentCamera = 'environment';
+
+        function switchCamera() {
+            if (currentCamera === 'environment') {
+                currentCamera = 'user'; // Changer pour la caméra avant
+            } else {
+                currentCamera = 'environment'; // Changer pour la caméra arrière
+            }
+
+            // Mettre à jour les contraintes de la caméra
+            const constraints = { video: { facingMode: currentCamera, width: { ideal: 1920 }, height: { ideal: 1080 } } };
+
+            // Demander l'accès à la nouvelle caméra
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then((stream) => {
+                    video.srcObject = stream;
+                })
+                .catch((err) => {
+                    console.error("Erreur d'accès à la caméra: ", err);
+                });
+        }
+
+        const switchCameraButton = document.getElementById('switchCameraButton');
+        switchCameraButton.addEventListener('click', switchCamera);
+
         // Demander l'accès à la caméra
         navigator.mediaDevices.getUserMedia({ video: true })
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: currentCamera }, width: { ideal: 1920 }, height: { ideal: 1080 } })
             .then((stream) => {
                 video.srcObject = stream;
             })
@@ -52,6 +79,13 @@
             previewImage.src = dataUrl;
             previewImage.style.display = 'block';
             uncaptureButton.style.display = 'block';
+        });
+
+        // Annuler la photo
+        uncaptureButton.addEventListener('click', () => {
+            previewImage.style.display = 'none';
+            uncaptureButton.style.display = 'none';
+            photoDataInput.value = '';
         });
 
         // Gestion de l'envoi du formulaire

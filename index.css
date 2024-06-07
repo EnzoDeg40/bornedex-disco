@@ -4,17 +4,28 @@ body {
 
 #cameraContainer {
   position: relative;
+  height: 80vh;
 }
 #cameraContainer * {
   display: block;
   position: absolute;
-  top: 0;
   left: 0;
+}
+#cameraContainer #uncapture {
+  left: 10px;
+  top: 10px;
+  width: 32px;
+}
+#cameraContainer #capture {
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 10px;
+  width: 64px;
 }
 
 #camera, #preview {
   width: 100%;
-  max-height: 80vh;
+  height: 100%;
   -o-object-fit: cover;
      object-fit: cover;
 }
