@@ -2,14 +2,27 @@ body {
   margin: 0;
 }
 
+#header {
+  height: 25px;
+}
+
 #cameraContainer {
   position: relative;
-  height: 80vh;
+  height: calc(100dvh - 25px);
 }
 #cameraContainer * {
   display: block;
   position: absolute;
-  left: 0;
+}
+#cameraContainer #switchCameraButton {
+  right: 10px;
+  top: 10px;
+  width: 32px;
+  background-color: transparent;
+  border: none;
+}
+#cameraContainer #switchCameraButton img {
+  width: 100%;
 }
 #cameraContainer #uncapture {
   left: 10px;
@@ -22,8 +35,37 @@ body {
   bottom: 10px;
   width: 64px;
 }
+#cameraContainer #validateButton {
+  right: 10px;
+  bottom: 10px;
+  background-color: rgb(13, 168, 173);
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+}
 
-#camera, #preview {
+#photoForm .first-form-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background-color: #EBEDEF;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 10px;
+}
+#photoForm .first-form-group #photoPreview {
+  max-width: 128px;
+  border-radius: 5px;
+}
+#photoForm .first-form-group input {
+  border: none;
+  flex: 1;
+  background-color: transparent;
+}
+
+#camera,
+#preview {
   width: 100%;
   height: 100%;
   -o-object-fit: cover;

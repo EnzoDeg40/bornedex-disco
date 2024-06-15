@@ -13,32 +13,82 @@ body {
 
 // }
 
+#header {
+    height: 25px;
+}
 
-#cameraContainer{
+#cameraContainer {
     position: relative;
-    height: 80vh;
+    height: calc(100dvh - 25px);
+
     * {
         display: block;
         position: absolute;
-        left: 0;
     }
-    
-    #uncapture{
+
+    #switchCameraButton{
+        right: 10px;
+        top: 10px;
+        width: 32px;
+        background-color: transparent;
+        border: none;
+
+        img {
+            width: 100%;
+        }
+    }
+
+    #uncapture {
         left: 10px;
         top: 10px;
         width: 32px;
     }
 
-    #capture{
+    #capture {
         left: 50%;
         transform: translateX(-50%);
         bottom: 10px;
         width: 64px;
     }
+
+    #validateButton {
+        right: 10px;
+        bottom: 10px;
+        background-color: rgb(13, 168, 173);
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 20px;
+    }
 }
 
-#camera, #preview
-{
+
+#photoForm {
+    .first-form-group {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        background-color: #EBEDEF;
+        padding: 10px;
+        border-radius: 10px;
+        margin: 10px;
+
+        #photoPreview {
+            max-width: 128px;
+            border-radius: 5px;
+        }
+
+        input {
+            border: none;
+            flex: 1;
+            background-color: transparent;
+            // color: white;
+        }
+    }
+}
+
+#camera,
+#preview {
     width: 100%;
     height: 100%;
     object-fit: cover; // or contain

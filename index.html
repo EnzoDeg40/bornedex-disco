@@ -2,26 +2,36 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
     <title>Prise de photo avec prévisualisation</title>
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <h1>Prise de photo avec prévisualisation</h1>
-    
+    <div id="header">
+        Bornedex
+    </div>
+
     <div id="cameraContainer">
         <video id="camera" autoplay></video>
         <img id="capture" src="take.svg" alt="Prendre une photo">
-        <button id="switchCameraButton">Changer de caméra</button>
+        <button id="switchCameraButton">
+            <img src="return.svg" alt="Changer de caméra">
+        </button>
         <canvas id="snapshot"></canvas>
         <img id="preview" alt="Prévisualisation de la photo" style="display: none;">
         <img id="uncapture" src="cross.svg" alt="Annuler" style="display: none;">
-    </div>
+        <button id="validateButton" style="display: none;">Valider</button>
+    </div>    
 
-    <form id="photoForm">
+    <form id="photoForm" style="display: none;">
         <p id="imageWidth"></p>
         <p id="imageHeight"></p>
         <input type="hidden" name="photo" id="photoData">
+        <div class="first-form-group">
+            <img id="photoPreview" alt="Prévisualisation de la photo">
+            <input type="text" name="photoName" id="photoName" placeholder="Nom de la borne">
+        </div>
+
         <button type="submit">Envoyer la photo</button>
     </form>
 
@@ -35,7 +45,9 @@
         const previewImage = document.getElementById('preview');
         const photoForm = document.getElementById('photoForm');
         const photoDataInput = document.getElementById('photoData');
+        const photoPreview = document.getElementById('photoPreview');
         const uncaptureButton = document.getElementById('uncapture');
+        const validateButton = document.getElementById('validateButton');
 
         let currentCamera = 'environment';
 
@@ -93,9 +105,11 @@
 
             const dataUrl = canvas.toDataURL('image/png');
             photoDataInput.value = dataUrl;
+            photoPreview.src = dataUrl;
             previewImage.src = dataUrl;
             previewImage.style.display = 'block';
             uncaptureButton.style.display = 'block';
+            validateButton.style.display = 'block';
 
             // ajoute au formulaire la largeur et la hauteur de l'image
             const imageWidth = document.getElementById('imageWidth');
@@ -108,6 +122,7 @@
         uncaptureButton.addEventListener('click', () => {
             previewImage.style.display = 'none';
             uncaptureButton.style.display = 'none';
+            validateButton.style.display = 'none';
             photoDataInput.value = '';
         });
 
