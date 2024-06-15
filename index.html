@@ -19,6 +19,8 @@
     </div>
 
     <form id="photoForm">
+        <p id="imageWidth"></p>
+        <p id="imageHeight"></p>
         <input type="hidden" name="photo" id="photoData">
         <button type="submit">Envoyer la photo</button>
     </form>
@@ -61,10 +63,22 @@
         switchCameraButton.addEventListener('click', switchCamera);
 
         // Demander l'accès à la caméra
-        navigator.mediaDevices.getUserMedia({ video: true })
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: currentCamera }, width: { ideal: 1920 }, height: { ideal: 1080 } })
+        // navigator.mediaDevices.getUserMedia({ video: true })
+        const camOptions = {
+            audio: false,
+            video: { 
+                facingMode: currentCamera,
+                width: { ideal: 1920 },
+                height: { ideal: 1080 }
+            },
+        };
+
+        navigator.mediaDevices.getUserMedia(camOptions)
             .then((stream) => {
                 video.srcObject = stream;
+                // Debug data
+                console.log(navigator.mediaDevices.getSupportedConstraints());
+                console.log(navigator.mediaDevices.enumerateDevices());
             })
             .catch((err) => {
                 console.error("Erreur d'accès à la caméra: ", err);
@@ -82,6 +96,12 @@
             previewImage.src = dataUrl;
             previewImage.style.display = 'block';
             uncaptureButton.style.display = 'block';
+
+            // ajoute au formulaire la largeur et la hauteur de l'image
+            const imageWidth = document.getElementById('imageWidth');
+            const imageHeight = document.getElementById('imageHeight');
+            imageWidth.innerText = 'Largeur: ' + canvas.width;
+            imageHeight.innerText = 'Hauteur: ' + canvas.height;
         });
 
         // Annuler la photo
