@@ -13,22 +13,43 @@ body {
 
 // }
 
+.button-action {
+    background-color: #0DA8AD;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    margin: 10px;
+}
+
+$header-height: 32px;
+
 #header {
-    height: 25px;
+    height: $header-height;
+    position: fixed;
+    z-index: 10;
+    width: 100%;
+    background-color: #00000077;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
 }
 
 #cameraContainer {
     position: relative;
-    height: calc(100dvh - 25px);
+    height: 100dvh;
+    background-color: black;
 
     * {
         display: block;
         position: absolute;
     }
 
-    #switchCameraButton{
+    #switchCameraButton {
         right: 10px;
-        top: 10px;
+        top: 10px + $header-height;
         width: 32px;
         background-color: transparent;
         border: none;
@@ -40,7 +61,7 @@ body {
 
     #uncapture {
         left: 10px;
-        top: 10px;
+        top: 10px + $header-height;
         width: 32px;
     }
 
@@ -54,11 +75,6 @@ body {
     #validateButton {
         right: 10px;
         bottom: 10px;
-        background-color: rgb(13, 168, 173);
-        border: none;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 20px;
     }
 }
 

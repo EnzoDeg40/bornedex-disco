@@ -8,7 +8,7 @@
 </head>
 <body>
     <div id="header">
-        Bornedex
+        <div class="title">Bornedex</div>
     </div>
 
     <div id="cameraContainer">
@@ -20,10 +20,13 @@
         <canvas id="snapshot"></canvas>
         <img id="preview" alt="Prévisualisation de la photo" style="display: none;">
         <img id="uncapture" src="cross.svg" alt="Annuler" style="display: none;">
-        <button id="validateButton" style="display: none;">Valider</button>
+        <button id="validateButton" class="button-action" style="display: none;">Valider</button>
     </div>    
 
     <form id="photoForm" style="display: none;">
+        <button type="button" id="backButton">
+            <img src="return.svg" alt="Retour">
+        </button>
         <p id="imageWidth"></p>
         <p id="imageHeight"></p>
         <input type="hidden" name="photo" id="photoData">
@@ -31,25 +34,25 @@
             <img id="photoPreview" alt="Prévisualisation de la photo">
             <input type="text" name="photoName" id="photoName" placeholder="Nom de la borne">
         </div>
-
         <button type="submit">Envoyer la photo</button>
-    </form>
-
-    <script src="node_modules/eruda/eruda.js"></script>
-    <script>eruda.init();</script>
-
-    <script>
-        const video = document.getElementById('camera');
-        const canvas = document.getElementById('snapshot');
-        const captureButton = document.getElementById('capture');
-        const previewImage = document.getElementById('preview');
-        const photoForm = document.getElementById('photoForm');
-        const photoDataInput = document.getElementById('photoData');
-        const photoPreview = document.getElementById('photoPreview');
-        const uncaptureButton = document.getElementById('uncapture');
-        const validateButton = document.getElementById('validateButton');
-
-        let currentCamera = 'environment';
+        </form>
+        
+        <script src="node_modules/eruda/eruda.js"></script>
+        <script>eruda.init();</script>
+        
+        <script>
+            const video = document.getElementById('camera');
+            const canvas = document.getElementById('snapshot');
+            const captureButton = document.getElementById('capture');
+            const previewImage = document.getElementById('preview');
+            const photoForm = document.getElementById('photoForm');
+            const photoDataInput = document.getElementById('photoData');
+            const photoPreview = document.getElementById('photoPreview');
+            const uncaptureButton = document.getElementById('uncapture');
+            const validateButton = document.getElementById('validateButton');
+            const backButton = document.getElementById('backButton');
+            
+            let currentCamera = 'environment';
 
         function switchCamera() {
             if (currentCamera === 'environment') {
@@ -63,19 +66,17 @@
 
             // Demander l'accès à la nouvelle caméra
             navigator.mediaDevices.getUserMedia(constraints)
-                .then((stream) => {
-                    video.srcObject = stream;
+            .then((stream) => {
+                video.srcObject = stream;
                 })
                 .catch((err) => {
                     console.error("Erreur d'accès à la caméra: ", err);
-                });
-        }
-
-        const switchCameraButton = document.getElementById('switchCameraButton');
+                    });
+                    }
+                    
+                    const switchCameraButton = document.getElementById('switchCameraButton');
         switchCameraButton.addEventListener('click', switchCamera);
 
-        // Demander l'accès à la caméra
-        // navigator.mediaDevices.getUserMedia({ video: true })
         const camOptions = {
             audio: false,
             video: { 
@@ -118,12 +119,24 @@
             imageHeight.innerText = 'Hauteur: ' + canvas.height;
         });
 
+        // Valider la photo
+        validateButton.addEventListener('click', () => {
+            cameraContainer.style.display = 'none';
+            photoForm.style.display = 'block';
+        });
+
         // Annuler la photo
         uncaptureButton.addEventListener('click', () => {
             previewImage.style.display = 'none';
             uncaptureButton.style.display = 'none';
             validateButton.style.display = 'none';
             photoDataInput.value = '';
+        });
+
+        // backButton
+        backButton.addEventListener('click', () => {
+            cameraContainer.style.display = 'block';
+            photoForm.style.display = 'none';
         });
 
         // Gestion de l'envoi du formulaire
