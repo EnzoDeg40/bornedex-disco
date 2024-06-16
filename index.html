@@ -27,8 +27,6 @@
         <button type="button" id="backButton">
             <img src="return.svg" alt="Retour">
         </button>
-        <p id="imageWidth"></p>
-        <p id="imageHeight"></p>
         <input type="hidden" name="photo" id="photoData">
         <div class="first-form-group">
             <img id="photoPreview" alt="Prévisualisation de la photo">
@@ -112,11 +110,7 @@
             uncaptureButton.style.display = 'block';
             validateButton.style.display = 'block';
 
-            // ajoute au formulaire la largeur et la hauteur de l'image
-            const imageWidth = document.getElementById('imageWidth');
-            const imageHeight = document.getElementById('imageHeight');
-            imageWidth.innerText = 'Largeur: ' + canvas.width;
-            imageHeight.innerText = 'Hauteur: ' + canvas.height;
+            console.log(canvas.width, canvas.height);
         });
 
         // Valider la photo
