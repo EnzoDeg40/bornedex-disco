@@ -6,12 +6,16 @@ body {
     // flex-direction: column;
 }
 
-// @media (orientation: landscape) {
-//     body {
-//         flex-direction: row;
-//     }
-
-// }
+@media (orientation: landscape) {
+    #capture {
+        right: 10px;
+        left: auto !important;
+        transform: translateX(0) !important;
+        bottom: auto !important;
+        top: 50%;
+        transform: translateY(-50%) !important;
+    }
+}
 
 .button-action {
     background-color: #0DA8AD;
@@ -80,20 +84,14 @@ $header-height: 32px;
 
 
 #photoForm {
-    .first-form-group {
+    .form-group{
         display: flex;
-        align-items: flex-start;
-        gap: 10px;
+        flex-direction: column;
         background-color: #EBEDEF;
         padding: 10px;
         border-radius: 10px;
         margin: 10px;
-
-        #photoPreview {
-            max-width: 128px;
-            border-radius: 5px;
-        }
-
+        
         input {
             border: none;
             flex: 1;
@@ -101,6 +99,22 @@ $header-height: 32px;
             // color: white;
         }
     }
+
+    .first-form-group {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 10px;
+        background-color: #EBEDEF;
+        
+        #photoPreview {
+            max-width: 128px;
+            border-radius: 5px;
+        }
+        
+        
+    }
+    
 }
 
 #camera,

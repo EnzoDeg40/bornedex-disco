@@ -28,17 +28,47 @@
             <img src="return.svg" alt="Retour">
         </button>
         <input type="hidden" name="photo" id="photoData">
-        <div class="first-form-group">
+        <div class="first-form-group form-group">
             <img id="photoPreview" alt="Prévisualisation de la photo">
             <input type="text" name="photoName" id="photoName" placeholder="Nom de la borne">
         </div>
-        <button type="submit">Envoyer la photo</button>
+        <div class="form-group">
+            <!-- <label for="city">Ville:</label> -->
+            <input type="city" name="city" id="city" placeholder="Ville">
+            <!-- <label for="latitude">Latitude:</label> -->
+            <input type="latitude" name="latitude" id="latitude" placeholder="Latitude">
+            <!-- <label for="longitude">Longitude:</label> -->
+            <input type="longitude" name="longitude" id="longitude" placeholder="Longitude">
+        </div>
+
+        <button type="submit" class="button-action">Envoyer la photo</button>
         </form>
         
         <script src="node_modules/eruda/eruda.js"></script>
         <script>eruda.init();</script>
         
+        <script src="gps.js"></script>
+
         <script>
+            const geoManager = new GeolocationManager();
+            geoManager.activateGPS();
+
+            // geoManager.getCurrentPosition().then(position => {
+            //     console.log('Position actuelle:', position);
+            //     geoManager.getCityName().then(city => {
+            //         console.log('Ville actuelle:', city);
+            //     }).catch(error => {
+            //         console.error('Erreur lors de la récupération de la ville:', error);
+            //     });
+            // }).catch(error => {
+            //     console.error('Erreur lors de la récupération de la position:', error);
+            // });
+
+            // setTimeout(() => {
+            //     geoManager.deactivateGPS();
+            // }, 10000);
+
+
             const video = document.getElementById('camera');
             const canvas = document.getElementById('snapshot');
             const captureButton = document.getElementById('capture');
@@ -111,6 +141,18 @@
             validateButton.style.display = 'block';
 
             console.log(canvas.width, canvas.height);
+
+            if(geoManager.currentPosition)
+            {
+                document.getElementById('latitude').value = geoManager.currentPosition.coords.latitude;
+                document.getElementById('longitude').value = geoManager.currentPosition.coords.longitude;
+                geoManager.getCityName().then(city => {
+                    document.getElementById('city').value = city;
+                }).catch(error => {
+                    console.error('Erreur lors de la récupération de la ville:', error);
+                });
+            }
+            
         });
 
         // Valider la photo
