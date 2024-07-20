@@ -34,13 +34,14 @@
         </div>
         <div class="form-group">
             <!-- <label for="city">Ville:</label> -->
-            <input type="city" name="city" id="city" placeholder="Ville">
+            <input type="city" name="city" id="city" placeholder="Ville" maxlength="58" required>
             <!-- <label for="latitude">Latitude:</label> -->
-            <input type="latitude" name="latitude" id="latitude" placeholder="Latitude">
+            <input type="latitude" name="latitude" id="latitude" placeholder="Latitude" maxlength="20" required>
             <!-- <label for="longitude">Longitude:</label> -->
-            <input type="longitude" name="longitude" id="longitude" placeholder="Longitude">
+            <input type="longitude" name="longitude" id="longitude" placeholder="Longitude" maxlength="20" required>
         </div>
 
+        <button type="download" class="button-action">Télécharger</button>
         <button type="submit" class="button-action">Envoyer la photo</button>
         </form>
         
@@ -181,6 +182,35 @@
             console.log("Photo envoyée:", photoDataInput.value);
             // Vous pouvez ajouter ici le code pour envoyer le formulaire à votre serveur
         });
+
+        // Télécharger la photo
+        const downloadButton = document.querySelector('button[type="download"]');
+        downloadButton.addEventListener('click', () => {
+            const dataUrl = photoDataInput.value;
+            const link = document.createElement('a');
+            link.download = 'photo.png';
+            link.href = dataUrl;
+            link.click();
+        });
+
+        // Gestion des inputs latitudes et longitudes
+        const latitudeInput = document.getElementById('latitude');
+        const longitudeInput = document.getElementById('longitude');
+
+        function formatCoordinates(input) {
+            input.value = input.value.replace(',', '.');
+            input.value = input.value.replace(/[a-zA-Z]/g, '');
+        }
+
+        latitudeInput.addEventListener('input', () => {
+            formatCoordinates(latitudeInput);
+        });
+
+        longitudeInput.addEventListener('input', () => {
+            formatCoordinates(longitudeInput);
+        });
+
+
     </script>
 </body>
 </html>
