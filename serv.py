@@ -6,18 +6,33 @@ app = Flask(__name__, template_folder='templates', static_folder='static', stati
 def index():
     return render_template('index.html')
 
+class Borne:
+    def __init__(self, lat, lon, city):
+        # self.id = id
+        self.lat = lat
+        self.lon = lon
+        self.city = city
+    
+    def is_valid(self):
+        if self.lat is None or self.lon is None or self.city is None:
+            return False
+        try:
+            float(self.lat)
+            float(self.lon)
+        except ValueError:
+            return False
+        return True
+
 @app.route('/upload', methods=['POST'])
 def upload():
-    print('Request:', request.form.image_data)
     
-    # image_data = request.form.get('image_data')
-    # lat = request.form.get('lat')
-    # lon = request.form.get('lon')
+    image_data = request.form.get('photo')
+    if image_data is None:
+        return 'No image data'   
     
-    # # Process the image data, latitude, and longitude here
-    # print('Image data:', image_data)
-    # print('Latitude:', lat)
-    # print('Longitude:', lon)
+    borne = Borne(request.form.get('lat'), request.form.get('lon'), request.form.get('city'))
+    if not borne.is_valid():
+        return 'Invalid data'
     
     return 'Upload successful'
 
