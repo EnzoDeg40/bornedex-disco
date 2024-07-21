@@ -43,7 +43,7 @@
 
         <button type="download" class="button-action">Télécharger</button>
         <button type="submit" class="button-action">Envoyer la photo</button>
-        </form>
+    </form>
         
         <script src="node_modules/eruda/eruda.js"></script>
         <script>eruda.init();</script>
@@ -181,6 +181,23 @@
             e.preventDefault();
             console.log("Photo envoyée:", photoDataInput.value);
             // Vous pouvez ajouter ici le code pour envoyer le formulaire à votre serveur
+
+            const formData = new FormData(photoForm);
+            formData.append('latitude', document.getElementById('latitude').value);
+            formData.append('longitude', document.getElementById('longitude').value);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Réponse du serveur:', data);
+                // Faire quelque chose avec la réponse du serveur
+            })
+            .catch(error => {
+                console.error('Erreur lors de l\'envoi du formulaire:', error);
+            });
         });
 
         // Télécharger la photo
