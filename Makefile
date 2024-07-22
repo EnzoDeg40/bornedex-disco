@@ -6,6 +6,7 @@ all: run
 
 install:
 	$(PIP) install -r requirements.txt
+	$(PYTHON) init.py
 
 run:
 	$(PYTHON) serv.py
