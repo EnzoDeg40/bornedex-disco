@@ -21,6 +21,11 @@ body {
   margin: 10px;
 }
 
+.button-second {
+  background-color: #575757;
+  color: white;
+}
+
 #header {
   height: 32px;
   position: fixed;

@@ -5,6 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
     <title>Prise de photo avec prévisualisation</title>
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+    <style>
+        .material-symbols-rounded {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+
+        .icon-white {
+          color: white;
+        }
+    </style>
 </head>
 <body>
     <div id="header">
@@ -15,11 +29,14 @@
         <video id="camera" autoplay></video>
         <img id="capture" src="take.svg" alt="Prendre une photo">
         <button id="switchCameraButton">
-            <img src="return.svg" alt="Changer de caméra">
+            <span class="material-symbols-rounded icon-white">flip_camera_android</span>
         </button>
         <canvas id="snapshot"></canvas>
         <img id="preview" alt="Prévisualisation de la photo" style="display: none;">
-        <img id="uncapture" src="cross.svg" alt="Annuler" style="display: none;">
+        <!-- <img id="uncapture" src="cross.svg" alt="Annuler" style="display: none;"> -->
+        <button id="uncapture" style="display: none;">
+            <span class="material-symbols-rounded icon-white">close</span>
+        </button>
         <button id="validateButton" class="button-action" style="display: none;">Valider</button>
     </div>    
 
@@ -41,8 +58,14 @@
             <input type="longitude" name="longitude" id="longitude" placeholder="Longitude" maxlength="20" required>
         </div>
 
-        <button type="download" class="button-action">Télécharger</button>
-        <button type="submit" class="button-action">Envoyer la photo</button>
+        <button type="download" class="button-action button-second">
+            <span class="material-symbols-rounded icon-white">file_download</span>
+            <span>Télécharger</span>
+        </button>
+        <button type="submit" class="button-action">
+            <span>Envoyer la photo</span>
+            <span class="material-symbols-rounded icon-white">send</span>
+        </button>
     </form>
         
         <script src="node_modules/eruda/eruda.js"></script>
