@@ -194,8 +194,8 @@
             // Vous pouvez ajouter ici le code pour envoyer le formulaire à votre serveur
 
             const formData = new FormData(photoForm);
-            formData.append('latitude', document.getElementById('latitude').value);
-            formData.append('longitude', document.getElementById('longitude').value);
+            formData.append('lat', document.getElementById('latitude').value);
+            formData.append('lon', document.getElementById('longitude').value);
 
             fetch('/upload', {
                 method: 'POST',

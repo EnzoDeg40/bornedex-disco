@@ -32,9 +32,9 @@ def upload():
     
     borne = Borne(request.form.get('lat'), request.form.get('lon'), request.form.get('city'))
     if not borne.is_valid():
-        return 'Invalid data'
+        return (jsonify({'error': 'Invalid Borne data'}), 400)
     
-    return 'Upload successful'
+    return jsonify({'success': True})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
