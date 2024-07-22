@@ -83,6 +83,56 @@
             
             let currentCamera = 'environment';
 
+            class Camera {
+                static capture(){
+                    const context = canvas.getContext('2d');
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        
+                    const dataUrl = canvas.toDataURL('image/png');
+                    photoDataInput.value = dataUrl;
+                    photoPreview.src = dataUrl;
+                    previewImage.src = dataUrl;
+                    previewImage.style.display = 'block';
+                    uncaptureButton.style.display = 'block';
+                    validateButton.style.display = 'block';
+        
+                    console.log(canvas.width, canvas.height);
+                    
+                    if(canvas.width <= 0 || canvas.height <= 0)
+                    {
+                        alert('Erreur lors de la capture de la photo');
+                        console.log('Erreur lors de la capture de la photo');
+                    }
+        
+                    if(geoManager.currentPosition)
+                    {
+                        document.getElementById('latitude').value = geoManager.currentPosition.coords.latitude;
+                        document.getElementById('longitude').value = geoManager.currentPosition.coords.longitude;
+                        geoManager.getCityName().then(city => {
+                            document.getElementById('city').value = city;
+                        }).catch(error => {
+                            console.error('Erreur lors de la récupération de la ville:', error);
+                        });
+                    }
+                    
+                }
+
+                static uncapture(){
+                    previewImage.style.display = 'none';
+                    uncaptureButton.style.display = 'none';
+                    validateButton.style.display = 'none';
+                    photoDataInput.value = '';
+                }
+
+                static validate(){
+                    cameraContainer.style.display = 'none';
+                    photoForm.style.display = 'block';
+                }
+            }
+
+
         function switchCamera() {
             if (currentCamera === 'environment') {
                 currentCamera = 'user'; // Changer pour la caméra avant
@@ -126,49 +176,10 @@
                 console.error("Erreur d'accès à la caméra: ", err);
             });
 
-        // Capturer une photo
-        captureButton.addEventListener('click', () => {
-            const context = canvas.getContext('2d');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-            const dataUrl = canvas.toDataURL('image/png');
-            photoDataInput.value = dataUrl;
-            photoPreview.src = dataUrl;
-            previewImage.src = dataUrl;
-            previewImage.style.display = 'block';
-            uncaptureButton.style.display = 'block';
-            validateButton.style.display = 'block';
-
-            console.log(canvas.width, canvas.height);
-
-            if(geoManager.currentPosition)
-            {
-                document.getElementById('latitude').value = geoManager.currentPosition.coords.latitude;
-                document.getElementById('longitude').value = geoManager.currentPosition.coords.longitude;
-                geoManager.getCityName().then(city => {
-                    document.getElementById('city').value = city;
-                }).catch(error => {
-                    console.error('Erreur lors de la récupération de la ville:', error);
-                });
-            }
-            
-        });
-
-        // Valider la photo
-        validateButton.addEventListener('click', () => {
-            cameraContainer.style.display = 'none';
-            photoForm.style.display = 'block';
-        });
-
-        // Annuler la photo
-        uncaptureButton.addEventListener('click', () => {
-            previewImage.style.display = 'none';
-            uncaptureButton.style.display = 'none';
-            validateButton.style.display = 'none';
-            photoDataInput.value = '';
-        });
+        captureButton.addEventListener('click', Camera.capture);
+        validateButton.addEventListener('click', Camera.validate);
+        uncaptureButton.addEventListener('click', Camera.uncapture);
 
         // backButton
         backButton.addEventListener('click', () => {
@@ -205,7 +216,7 @@
         downloadButton.addEventListener('click', () => {
             const dataUrl = photoDataInput.value;
             const link = document.createElement('a');
-            link.download = 'photo.png';
+            link.download = 'bornedex_' + Date.now() + '_' + longitudeInput.value + '_' + latitudeInput.value + '.png';
             link.href = dataUrl;
             link.click();
         });
