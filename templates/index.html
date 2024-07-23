@@ -42,7 +42,8 @@
 
     <form id="photoForm" style="display: none;">
         <button type="button" id="backButton">
-            <img src="return.svg" alt="Retour">
+            <!-- <img src="return.svg" alt="Retour"> -->
+            <span class="material-symbols-rounded">arrow_back</span>
         </button>
         <input type="hidden" name="photo" id="photoData">
         <div class="first-form-group form-group">
@@ -58,11 +59,11 @@
             <input type="longitude" name="longitude" id="longitude" placeholder="Longitude" maxlength="20" required>
         </div>
 
-        <button type="download" class="button-action button-second">
+        <button type="download" class="button-action button-second" id="downloadButton">
             <span class="material-symbols-rounded icon-white">file_download</span>
             <span>Télécharger</span>
         </button>
-        <button type="submit" class="button-action">
+        <button type="submit" class="button-action" id="sendButton">
             <span>Envoyer la photo</span>
             <span class="material-symbols-rounded icon-white">send</span>
         </button>
@@ -153,6 +154,14 @@
                     cameraContainer.style.display = 'none';
                     photoForm.style.display = 'block';
                 }
+            
+                static download(){
+                    const dataUrl = photoDataInput.value;
+                    const link = document.createElement('a');
+                    link.download = 'bornedex_' + Date.now() + '_' + longitudeInput.value + '_' + latitudeInput.value + '.png';
+                    link.href = dataUrl;
+                    link.click();
+                }
             }
 
 
@@ -213,6 +222,12 @@
         // Gestion de l'envoi du formulaire
         photoForm.addEventListener('submit', (e) => {
             e.preventDefault();
+
+            // bug de merde à corriger
+            if (e.submitter.id === 'downloadButton') {
+                return;
+            }
+
             console.log("Photo envoyée:", photoDataInput.value);
             // Vous pouvez ajouter ici le code pour envoyer le formulaire à votre serveur
 
@@ -227,7 +242,9 @@
             .then(response => response.json())
             .then(data => {
                 console.log('Réponse du serveur:', data);
-                // Faire quelque chose avec la réponse du serveur
+                alert('Photo envoyée avec succès');
+                // Camera.download();
+                // window.location.reload();
             })
             .catch(error => {
                 console.error('Erreur lors de l\'envoi du formulaire:', error);
@@ -236,13 +253,7 @@
 
         // Télécharger la photo
         const downloadButton = document.querySelector('button[type="download"]');
-        downloadButton.addEventListener('click', () => {
-            const dataUrl = photoDataInput.value;
-            const link = document.createElement('a');
-            link.download = 'bornedex_' + Date.now() + '_' + longitudeInput.value + '_' + latitudeInput.value + '.png';
-            link.href = dataUrl;
-            link.click();
-        });
+        downloadButton.addEventListener('click', Camera.download);
 
         // Gestion des inputs latitudes et longitudes
         const latitudeInput = document.getElementById('latitude');
