@@ -8,6 +8,8 @@ from PIL import Image
 from io import BytesIO
 import sqlite3
 
+import init
+
 app = Flask(__name__, template_folder='templates', static_folder='static', static_url_path='')
 
 @app.route('/')
@@ -33,6 +35,8 @@ class Borne:
         return True
 
 def save_base64_image(base64_string, output_dir, filename=None):
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
     base64_data = base64_string.split(',')[1]
     image_data = base64.b64decode(base64_data)
     image = Image.open(BytesIO(image_data))
