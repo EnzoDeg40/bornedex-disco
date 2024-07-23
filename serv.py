@@ -32,30 +32,21 @@ class Borne:
             return False
         return True
 
-def save_base64_image(base64_string, output_dir):
-    # Extraire la partie base64 de la chaîne
+def save_base64_image(base64_string, output_dir, filename=None):
     base64_data = base64_string.split(',')[1]
-    
-    # Décoder la chaîne base64
     image_data = base64.b64decode(base64_data)
-    
-    # Créer une image à partir des données décodées
     image = Image.open(BytesIO(image_data))
     
-    # Générer un nom de fichier aléatoire
-    random_filename = ''.join(random.choices(string.ascii_lowercase + string.digits, k=10)) + '.png'
+    if filename is None:
+        filename = ''.join(random.choices(string.ascii_lowercase + string.digits, k=10)) + '.png'
     
-    # Créer le chemin complet pour l'image
-    output_path = os.path.join(output_dir, random_filename)
-    
-    # Sauvegarder l'image
+    output_path = os.path.join(output_dir, filename)
     image.save(output_path)
     
-    return output_path
+    return True
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    
     rf = request.form
 
     image_data = rf.get('photo')
@@ -66,22 +57,20 @@ def upload():
     if not borne.is_valid():
         return (jsonify({'error': 'Invalid Borne data'}), 400)
     
-    # Save the image
-    image_path = save_base64_image(image_data, 'images')
+    try:
+        conn = sqlite3.connect('bornes.db')
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO bornes (nom, lon, lat, ville) VALUES (?, ?, ?, ?)", (borne.name, borne.lon, borne.lat, borne.city))
+        borne_id = cursor.lastrowid
+        conn.commit()
+        conn.close()
+    except sqlite3.Error:
+        return (jsonify({'error': 'Failed to insert Borne data'}), 500)
 
-    # Connect to SQLite database
-    conn = sqlite3.connect('bornes.db')
-    cursor = conn.cursor()
-
-    # Insert Borne data into the database
-    cursor.execute("INSERT INTO bornes (nom, lon, lat, ville) VALUES (?, ?, ?, ?)", (borne.name, borne.lon, borne.lat, borne.city))
-    conn.commit()
-
-    # Close the database connection
-    conn.close()
+    if not save_base64_image(image_data, 'images', str(borne_id) + '.png'):
+        return (jsonify({'error': 'Failed to save image'}), 500)
 
 
-    # Return a success response
     return jsonify({'success': True})
 
 @app.route('/bornes', methods=['GET'])
