@@ -9,7 +9,7 @@ install:
 	$(PYTHON) init.py
 
 run:
-	$(PYTHON) serv.py
+	$(PYTHON) app.py
 
 clean:
 	rm -rf __pycache__
