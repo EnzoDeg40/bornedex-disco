@@ -15,8 +15,9 @@ def index():
     return render_template('index.html')
 
 class Borne:
-    def __init__(self, lat, lon, city):
+    def __init__(self, name, lat, lon, city):
         self.id = None
+        self.name = name
         self.lat = lat
         self.lon = lon
         self.city = city
@@ -55,11 +56,13 @@ def save_base64_image(base64_string, output_dir):
 @app.route('/upload', methods=['POST'])
 def upload():
     
-    image_data = request.form.get('photo')
+    rf = request.form
+
+    image_data = rf.get('photo')
     if image_data is None:
-        return 'No image data'   
+        return (jsonify({'error': 'No image data provided'}), 400) 
     
-    borne = Borne(request.form.get('lat'), request.form.get('lon'), request.form.get('city'))
+    borne = Borne(rf.get('name'), rf.get('lat'), rf.get('lon'), rf.get('city'))
     if not borne.is_valid():
         return (jsonify({'error': 'Invalid Borne data'}), 400)
     
@@ -71,7 +74,7 @@ def upload():
     cursor = conn.cursor()
 
     # Insert Borne data into the database
-    cursor.execute("INSERT INTO bornes (nom, lon, lat, ville, is_valid) VALUES (?, ?, ?, ?, ?)", (image_path, borne.lon, borne.lat, borne.city, 0))
+    cursor.execute("INSERT INTO bornes (nom, lon, lat, ville) VALUES (?, ?, ?, ?)", (borne.name, borne.lon, borne.lat, borne.city))
     conn.commit()
 
     # Close the database connection
