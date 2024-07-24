@@ -6,11 +6,8 @@ import random
 import string
 from PIL import Image
 from io import BytesIO
-import sqlite3
 
-import init
 import db
-
 import models.borne as borne
 
 app = Flask(__name__, template_folder='templates', static_folder='static', static_url_path='')

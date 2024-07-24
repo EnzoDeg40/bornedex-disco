@@ -6,12 +6,12 @@ import models.borne as borne
 
 load_dotenv()
 
-if os.getenv('MONGODB_URI') is None:
+if os.environ.get('MONGODB_URI') is None:
     raise Exception('MONGODB_URI environment variable is not set')
 
 class Database:
     def __init__(self):
-        self.client = pymongo.MongoClient(os.getenv('MONGODB_URI'))
+        self.client = pymongo.MongoClient(os.environ.get('MONGODB_URI'))
         self.db = self.client['bornes_db']
 
     def get_bornes(self):
