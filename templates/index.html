@@ -239,15 +239,17 @@
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Réponse du serveur:', data);
-                alert('Photo envoyée avec succès');
-                // Camera.download();
-                // window.location.reload();
+            .then((response) => {
+                if (response.status === 200) {
+                    alert('Photo envoyée avec succès');
+                }
+                else {
+                    alert('Une erreur est survenue lors de l\'envoi de la photo (' + response.status + ')');
+                }
             })
-            .catch(error => {
-                console.error('Erreur lors de l\'envoi du formulaire:', error);
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('An error occurred during the HTTP request');
             });
         });
 

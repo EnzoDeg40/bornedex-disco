@@ -1,18 +1,6 @@
-import sqlite3
+import os
 
-conn = sqlite3.connect('bornes.db')
-cursor = conn.cursor()
-
-cursor.execute('''
-    CREATE TABLE IF NOT EXISTS bornes (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nom TEXT,
-        lon REAL NOT NULL,
-        lat REAL NOT NULL,
-        ville TEXT NOT NULL,
-        is_valid BOOLEAN NOT NULL DEFAULT 0
-    )
-''')
-
-conn.commit()
-conn.close()
+if not os.path.isfile('.env'):
+    print('Creating .env file...')
+    with open('.env', 'w') as f:
+        f.write('MONGODB_URI=mongodb+srv://user:password@server/\n')
