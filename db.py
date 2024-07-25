@@ -11,10 +11,8 @@ if os.environ.get('MONGODB_URI') is None:
 
 class Database:
     def __init__(self):
-        print(os.environ.get('MONGODB_URI'))
         try:
             self.client = pymongo.MongoClient(os.environ.get('MONGODB_URI'))
-            # Attempt to list the databases to verify the connection
             self.client.admin.command('ping')
             self.db = self.client['bornes_db']
             print('Connected to MongoDB')
