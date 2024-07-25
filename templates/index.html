@@ -232,6 +232,7 @@
             // Vous pouvez ajouter ici le code pour envoyer le formulaire à votre serveur
 
             const formData = new FormData(photoForm);
+            formData.delete('photo'); // TODO
             formData.append('lat', document.getElementById('latitude').value);
             formData.append('lon', document.getElementById('longitude').value);
 

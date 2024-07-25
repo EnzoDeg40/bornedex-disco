@@ -39,9 +39,10 @@ def save_base64_image(base64_string, output_dir, filename=None):
 def upload():
     rf = request.form
 
-    image_data = rf.get('photo')
-    if image_data is None:
-        return jsonify({'error': 'No image data provided'}), 400
+    # TODO
+    # image_data = rf.get('photo')
+    # if image_data is None:
+    #     return jsonify({'error': 'No image data provided'}), 400
     
     myborne = borne.Borne(rf.get('name'), rf.get('lat'), rf.get('lon'), rf.get('city'))
     if not myborne.is_valid():

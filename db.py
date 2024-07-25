@@ -13,6 +13,7 @@ class Database:
     def __init__(self):
         self.client = pymongo.MongoClient(os.environ.get('MONGODB_URI'))
         self.db = self.client['bornes_db']
+        print('Connected to MongoDB')
 
     def get_bornes(self):
         bornes_collection = self.db['bornes']
