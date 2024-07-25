@@ -11,9 +11,15 @@ if os.environ.get('MONGODB_URI') is None:
 
 class Database:
     def __init__(self):
-        self.client = pymongo.MongoClient(os.environ.get('MONGODB_URI'))
-        self.db = self.client['bornes_db']
-        print('Connected to MongoDB')
+        print(os.environ.get('MONGODB_URI'))
+        try:
+            self.client = pymongo.MongoClient(os.environ.get('MONGODB_URI'))
+            # Attempt to list the databases to verify the connection
+            self.client.admin.command('ping')
+            self.db = self.client['bornes_db']
+            print('Connected to MongoDB')
+        except pymongo.errors.ConnectionError as e:
+            raise Exception(f'Failed to connect to MongoDB: {e}')
 
     def get_bornes(self):
         bornes_collection = self.db['bornes']
@@ -23,8 +29,6 @@ class Database:
         return bornes_list
 
     def add_borne(self, borne):
-        # TODO
-        return True
         bornes_collection = self.db['bornes']
         borne_data = {
             'name': borne.name,
