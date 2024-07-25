@@ -23,6 +23,8 @@ class Database:
         return bornes_list
 
     def add_borne(self, borne):
+        # TODO
+        return True
         bornes_collection = self.db['bornes']
         borne_data = {
             'name': borne.name,
