@@ -32,7 +32,8 @@ class Database:
             'name': borne.name,
             'lat': borne.lat,
             'lon': borne.lon,
-            'city': borne.city
+            'city': borne.city,
+            'image': borne.image
         }
         bornes_collection.insert_one(borne_data)
         return True

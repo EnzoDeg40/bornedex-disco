@@ -47,6 +47,9 @@ def upload():
     if not myborne.is_valid():
         return jsonify({'error': 'Invalid Borne data'}), 400
     
+    if not myborne.set_image(image_data):
+        return jsonify({'error': 'Failed to set image'}), 400
+    
     if not thedb.add_borne(myborne):
         return jsonify({'error': 'Failed to add Borne to database'}), 500
 
