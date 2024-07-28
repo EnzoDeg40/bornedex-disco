@@ -1,13 +1,13 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, send_file
 
 import base64
 import os
 import random
 import string
-from PIL import Image
 from io import BytesIO
 
 import db
+import img
 import models.borne as borne
 
 app = Flask(__name__, template_folder='templates', static_folder='static', static_url_path='')
@@ -15,25 +15,28 @@ app = Flask(__name__, template_folder='templates', static_folder='static', stati
 global thedb
 
 thedb = db.Database()
+theimg = img.Image()
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-def save_base64_image(base64_string, output_dir, filename=None):
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-    base64_data = base64_string.split(',')[1]
-    image_data = base64.b64decode(base64_data)
-    image = Image.open(BytesIO(image_data))
-    
-    if filename is None:
-        filename = ''.join(random.choices(string.ascii_lowercase + string.digits, k=10)) + '.png'
-    
-    output_path = os.path.join(output_dir, filename)
-    image.save(output_path)
-    
-    return True
+@app.route('/bornes/<image_id>.jpg', methods=['GET'])
+def get_image(image_id):
+    id = image_id
+    if id is None:
+        return jsonify({'error': 'No ID provided'}), 400
+    borne = thedb.get_borne_id(id)
+    if borne is None:
+        return jsonify({'error': 'Borne not found'}), 404
+    image_data = borne['image']
+    if image_data is None:
+        return jsonify({'error': 'No image data found'}), 404
+    return send_file(BytesIO(theimg.format_base64(image_data)), mimetype='image/jpeg')
+
+@app.route('/debug')
+def debug():
+    return render_template('debug.html')
 
 @app.route('/upload', methods=['POST'])
 def upload():

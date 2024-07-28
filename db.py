@@ -1,4 +1,5 @@
 import pymongo
+from bson import ObjectId
 from dotenv import load_dotenv
 import os
 
@@ -25,6 +26,13 @@ class Database:
         for borne in bornes_list:
             borne['_id'] = str(borne['_id'])
         return bornes_list
+    
+    def get_borne_id(self, id):
+        bornes_collection = self.db['bornes']
+        borne = bornes_collection.find_one({'_id': ObjectId(id)})  # Use bson.ObjectId
+        if borne is not None:
+            borne['_id'] = str(borne['_id'])
+        return borne
 
     def add_borne(self, borne):
         bornes_collection = self.db['bornes']
