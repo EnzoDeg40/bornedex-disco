@@ -6,6 +6,13 @@
     <title>Document</title>
 </head>
 <body>
-    <img src="http://127.0.0.1:5001/bornes/66a37c5fb14a025271d3f6ce.jpg" alt="">
+    <!-- <img src="http://127.0.0.1:5001/bornes/66a37c5fb14a025271d3f6ce.jpg" alt=""> -->
+    {% for borne in bornes %}
+        <div>
+            <span>{{ borne._id }}</span>
+            <span>{{ borne.name }}</span>
+            <span><img src="/bornes/{{ borne._id }}.jpg" alt=""></span>
+        </div>
+    {% endfor %}
 </body>
 </html>

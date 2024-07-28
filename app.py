@@ -36,7 +36,7 @@ def get_image(image_id):
 
 @app.route('/debug')
 def debug():
-    return render_template('debug.html')
+    return render_template('debug.html', bornes=thedb.get_bornes())
 
 @app.route('/upload', methods=['POST'])
 def upload():
