@@ -38,6 +38,35 @@ def get_image(image_id):
 def debug():
     return render_template('debug.html', bornes=thedb.get_bornes())
 
+@app.route('/api/bornes/<id>', methods=['POST'])
+def update_borne(id):
+    rf = request.form
+
+    if id is None:
+        return jsonify({'error': 'No ID provided'}), 400
+
+    borne = thedb.get_borne_id(id)
+    if borne is None:
+        return jsonify({'error': 'Borne not found'}), 404
+
+    if rf.get('name') is not None:
+        borne['name'] = rf.get('name')
+    if rf.get('is_valid') is not None:
+        borne['is_valid'] = rf.get('is_valid')
+    if rf.get('lat') is not None:
+        borne['lat'] = rf.get('lat')
+    if rf.get('lon') is not None:
+        borne['lon'] = rf.get('lon')
+    if rf.get('city') is not None:
+        borne['city'] = rf.get('city')
+    if rf.get('alt') is not None:
+        borne['alt'] = rf.get('alt')
+    if rf.get('is_valid') is not None:
+        borne['is_valid'] = rf.get('is_valid')
+    # thedb.update_borne(borne)
+    thedb.update_new_borne(borne)
+    return jsonify({'success': True})
+
 @app.route('/upload', methods=['POST'])
 def upload():
     rf = request.form

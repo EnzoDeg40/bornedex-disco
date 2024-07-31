@@ -52,3 +52,18 @@ class Database:
         }
         bornes_collection.insert_one(borne_data)
         return True
+    
+    def update_new_borne(self, borne):
+        bornes_collection = self.db['bornes']
+        print(borne['_id'])
+        borne_id = ObjectId(borne['_id'])
+        update_data = {
+            'name': borne['name'],
+            'lat': borne['lat'],
+            'lon': borne['lon'],
+            'city': borne['city'],
+            'is_valid': borne['is_valid'],
+            'alt': borne['alt'],
+        }
+        result = bornes_collection.update_one({'_id': borne_id}, {'$set': update_data})
+        return result.modified_count > 0
