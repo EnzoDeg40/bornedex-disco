@@ -10,6 +10,7 @@ class Borne:
         self.lon = lon
         self.city = city
         self.image = None
+        self.is_valid = False
 
     def set_image(self, image):
         self.image = image
@@ -37,7 +38,7 @@ class Borne:
             print(f"Error setting image: {e}")
             return False
     
-    def is_valid(self):
+    def is_valid_data(self):
         if self.lat is None or self.lon is None or self.city is None:
             return False
         try:

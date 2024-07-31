@@ -47,7 +47,7 @@ def upload():
         return jsonify({'error': 'No image data provided'}), 400
     
     myborne = borne.Borne(rf.get('name'), rf.get('lat'), rf.get('lon'), rf.get('city'))
-    if not myborne.is_valid():
+    if not myborne.is_valid_data():
         return jsonify({'error': 'Invalid Borne data'}), 400
     
     if not myborne.set_image(image_data):

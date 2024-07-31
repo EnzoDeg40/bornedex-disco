@@ -10,12 +10,18 @@ load_dotenv()
 if os.environ.get('MONGODB_URI') is None:
     raise Exception('MONGODB_URI environment variable is not set')
 
+if os.environ.get('ENV') is None:
+    raise Exception('ENV environment variable is not set (must be dev or prod)')
+
 class Database:
     def __init__(self):
         try:
             self.client = pymongo.MongoClient(os.environ.get('MONGODB_URI'))
             self.client.admin.command('ping')
-            self.db = self.client['bornes_db']
+            if os.environ.get('ENV') == 'dev':
+                self.db = self.client['bornes_db_dev']
+            else:
+                self.db = self.client['bornes_db']
             print('Connected to MongoDB')
         except pymongo.errors.ConnectionError as e:
             raise Exception(f'Failed to connect to MongoDB: {e}')
@@ -41,7 +47,8 @@ class Database:
             'lat': borne.lat,
             'lon': borne.lon,
             'city': borne.city,
-            'image': borne.image
+            'image': borne.image,
+            'is_valid': False,
         }
         bornes_collection.insert_one(borne_data)
         return True

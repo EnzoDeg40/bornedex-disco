@@ -6,12 +6,65 @@
     <title>Document</title>
 </head>
 <body>
-    <!-- <img src="http://127.0.0.1:5001/bornes/66a37c5fb14a025271d3f6ce.jpg" alt=""> -->
+    <style>
+        .borne {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px;
+            border: 1px solid black;
+            margin: 5px;
+        }
+        .data {
+            display: flex;
+            flex-direction: column;
+        }
+        img {
+            border-radius: 10px;
+            height: 200px;
+        }
+        input {
+            border: none;
+            border-bottom: 1px solid black;
+        }
+    </style>
+
     {% for borne in bornes %}
-        <div>
-            <span>{{ borne._id }}</span>
-            <span>{{ borne.name }}</span>
-            <span><img src="/bornes/{{ borne._id }}.jpg" alt=""></span>
+        <form action="/api/bornes/{{ borne._id }}" method="POST" class="borne">
+            <div class="data">
+                <span>
+                    <label for="name">Nom</label>
+                    <input type="text" name="name" value="{{ borne.name }}">
+                    <input type="text" name="id" value="{{ borne._id }}" readonly>
+                </span>
+                <span>
+                    <label for="city">Ville</label>
+                    <input type="text" name="city" value="{{ borne.city }}">
+                </span>
+                <span>
+                    <label>Localisation</label>
+                    <input type="text" name="lon" value="{{ borne.lon }}">
+                    <input type="text" name="lat" value="{{ borne.lat }}">
+                </span>
+                <span>
+                    <label>Altitude</label>
+                    <input type="text" name="alt" value="{{ borne.alt }}">
+                </span>
+                <span>
+                    <label for="is_valid">Valide</label>
+                    <select name="is_valid">
+                        <option value="false" {% if borne.is_valid == false %}selected{% endif %}>Non</option>
+                        <option value="review" {% if borne.is_valid == 'review' %}selected{% endif %}>En attente</option>
+                        <option value="true" {% if borne.is_valid == true %}selected{% endif %}>Oui</option>
+                        <option value="archive" {% if borne.is_valid == 'archive' %}selected{% endif %}>Archivé</option>                    </select>
+                </span>
+                <span>
+                    <a href="https://www.google.com/maps/search/?api=1&query={{ borne.lat }},{{ borne.lon }}" target="_blank">Google Maps</a>
+                    <a href="https://redsto88.github.io/Bornedex/?Lat={{ borne.lat }}&Lng={{ borne.lon }}&zoom=16" target="_blank">Bornedex</a>
+                </span>
+                <button type="submit">Sauvegarder</button>
+            </div>
+            <img src="/bornes/{{ borne._id }}.jpg" alt="">
         </div>
     {% endfor %}
 </body>
